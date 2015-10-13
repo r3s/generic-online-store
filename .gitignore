@@ -1,0 +1,11 @@
+#python
+*.pyc
+
+#Sqlite DB
+*.sqlite
+
+#program generated files
+*.log
+
+#virtual environment
+env/

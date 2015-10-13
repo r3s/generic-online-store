@@ -1,0 +1,19 @@
+#THIS FILE /etc/nginx/sites-enabled/oscar
+server {
+listen       80;
+server_name  techdragon.ddns.net;
+
+	location /static/ {
+	    root /home/pi/django/agroshop/agroshop/public;
+	}
+
+	location /media/ {
+	    root /home/pi/django/agroshop/agroshop/public;
+	}
+	location / {
+	    uwsgi_pass      unix:///tmp/oscar-test.sock;
+	    include         uwsgi_params;
+	    uwsgi_param     SCRIPT_NAME '';
+	}
+
+}

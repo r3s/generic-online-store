@@ -55,7 +55,7 @@ ROOT_URLCONF = 'generic_shop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -95,10 +95,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
@@ -106,8 +102,8 @@ STATIC_URL = '/static/'
 MEDIA_URL  = '/media/'
 
 # In prodcution these are served by apache or nginx
-STATIC_ROOT = location('public/static')
-MEDIA_ROOT = location('public/media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'public/static'),
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media'),
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = "localhost.com"
 

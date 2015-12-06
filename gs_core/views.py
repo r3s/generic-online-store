@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django import http
 import logging
 from django.conf import settings
-
+from django.views.generic import View
 
 # globals
 if not settings.DEBUG:
@@ -13,4 +13,4 @@ else:
 
 # function based view example
 def home(request):
-    return http.HttpResponse( "You have arrived at home .. ")
+    return  render(request, "home.html")

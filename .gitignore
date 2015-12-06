@@ -9,3 +9,5 @@
 
 #virtual environment
 env/
+trash/
+public/

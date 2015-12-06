@@ -37,6 +37,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # User apps
+    'user_profiles',
+    'gs_core',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -102,10 +105,15 @@ STATIC_URL = '/static/'
 MEDIA_URL  = '/media/'
 
 # In prodcution these are served by apache or nginx
-STATIC_ROOT = os.path.join(BASE_DIR, 'public/static'),
-MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media'),
+STATIC_ROOT = os.path.join(BASE_DIR, 'public/static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = "localhost.com"
+
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, "static"),
+#     # '/var/www/static/',
+# )
 
 LOGGING = {
     'version': 1,

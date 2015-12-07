@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-  <title>  {% block head_title %}
-    Home | E-Shopper
-    {% endblock %}</title>
+  <title>  {% block head_title %}{% endblock %} | AgroShop</title>
     <link href="{% static "theme/css/bootstrap.min.css" %}" rel="stylesheet">
     <link href="{% static "theme/css/font-awesome.min.css" %}" rel="stylesheet">
     <link href="{% static "theme/css/prettyPhoto.css" %}" rel="stylesheet">
@@ -33,7 +31,7 @@
 
 <body>
 	<header id="header"><!--header-->
-		<div class="header_top"><!--header_top-->
+		<!-- <div class="header_top">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-6">
@@ -57,7 +55,7 @@
 					</div>
 				</div>
 			</div>
-		</div><!--/header_top-->
+		</div> -->
 
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
@@ -97,7 +95,12 @@
 								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+                {% if user.is_authenticated %}
+                <li><a> <i class="fa fa-lock"></i> {{user}} </a></li>
+                <li><a href="{% url 'login'%}?action=logout"> <i class="fa fa-eject"></i> Logout? </a></li>
+                {% else %}
+								<li><a href="{% url 'login' %}"><i class="fa fa-lock"></i> Login</a></li>
+                {% endif %}
 							</ul>
 						</div>
 					</div>
@@ -321,6 +324,31 @@
 	<script src="{% static "theme/js/price-range.js" %}"></script>
     <script src="{% static "theme/js/jquery.prettyPhoto.js" %}"></script>
     <script src="{% static "theme/js/main.js" %}"></script>
+
+    <script src="{% static "addon-js/notify.min.js" %}"></script>
+<script type="text/javascript">
+{% if messages %}
+$( document ).ready(function() {
+    {% for message in messages %}
+      $.notify(
+        "{{ message }}",
+        {
+          globalPosition: 'top left',
+          autoHideDelay: 3000,
+          {% if message.tags %} className: '{{ message.tags }}',{% endif %}
+          }
+      );
+    {% endfor %}
+});
+{% endif %}
+
+
+
+
+
+        </script>
+    {% if messages %}
+    {% endif %}
     {% block "scripts" %}
     {% endblock %}
 

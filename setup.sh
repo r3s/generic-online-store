@@ -7,8 +7,8 @@ virtualenv env
 # Activate virtual enviorment
 source env/bin/activate
 # Install python libraries in virtual environment
-pip install -r requirements.txt
+pip install -r requirements.txt --download-cache=~/.pdlc
 # Create database and admin user
-python manage.py syncdb
+python manage.py migrate
 # Run development server
 python manage.py runserver

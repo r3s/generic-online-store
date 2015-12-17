@@ -44,6 +44,10 @@ class UserRegistration(View):
                                             username=form.cleaned_data['username'],
                                              email=form.cleaned_data['email'],
                                              password=form.cleaned_data['password'])
+            user_obj = auth.authenticate(username=form.cleaned_data['username'],
+            password=form.cleaned_data['password'])
+            auth.login(request, user_obj)
+            return redirect("home")
         return  render(request, "user_profiles/login.html", {
     		"reg_form": form,
             "form":profile_forms.LoginForm

@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     # User apps
     'user_profiles',
     'gs_core',
+    'gs_admin'
 )
 
 MIDDLEWARE_CLASSES = (

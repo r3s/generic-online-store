@@ -15,7 +15,7 @@
         <i class="fa fa-shopping-cart"></i> Shop <div class="pull-right"><span class="caret"></span></div>
       </a>
       <ul class="templatemo-submenu">
-        <li class="{{menu_shop_product|default:'not_set'}}"><a href="#">Products</a></li>
+        <li class="{{menu_shop_product|default:'not_set'}}"><a href="{% url 'admin_shop_products'%}">Products</a></li>
         <li class="{{menu_shop_categories|default:'not_set'}}"><a href="#">Categories</a></li>
       </ul>
     </li>

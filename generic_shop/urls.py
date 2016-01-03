@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 
 urlpatterns = [
-    url(r'^admin/', include('gs_admin.urls')),
+    url(r'^admin/shop/', include('shop.admin_urls')),
     url(r'^auth/', include('user_profiles.urls')),
     url(r'^', include('gs_core.urls')),
 ]

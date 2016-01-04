@@ -40,7 +40,8 @@ INSTALLED_APPS = (
     # User apps
     'user_profiles',
     'gs_core',
-    'gs_admin'
+    'gs_admin',
+    'shop',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -169,3 +170,7 @@ LOGGING = {
         },
     }
 }
+
+# Override with environment specific settings
+# See local_settings_sample.py
+from local_settings import *

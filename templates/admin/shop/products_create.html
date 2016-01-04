@@ -1,0 +1,29 @@
+{% extends "admin/base.html" %}
+{% load staticfiles %}
+{% block head %}
+{% endblock %}
+
+
+{% block head_title %}
+{% endblock %}
+
+
+{% block css %}
+{% endblock %}
+
+{% block "sidebar" %}
+{% include "admin/sidebar.html" with menu_shop_open="open" menu_shop_product="active" %}
+{% endblock %}
+
+{% block "body" %}
+<form class="form-horizontal"  method="post">
+    {% csrf_token %}
+    {% include "admin/snippets/generic_form.html" with form=form %}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
+
+
+{% block "scripts" %}
+{% endblock %}

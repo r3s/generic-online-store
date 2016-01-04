@@ -11,3 +11,5 @@
 env/
 trash/
 public/
+
+generic_shop/local_settings.py

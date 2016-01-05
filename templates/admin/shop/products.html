@@ -9,8 +9,6 @@ Admin dashboard
 {% include "admin/sidebar.html" with menu_shop_open="open" menu_shop_product="active" %}
 {% endblock %}
 
-{% load custom_filters %}
-
 {% block "body" %}
 <ol class="breadcrumb">
   <li ><a href="#">Admin</a></li>
@@ -56,58 +54,11 @@ Admin dashboard
                   <li><a href="#">Username</a></li>
                 </ul>
               </div>
-
-
-              <div class="table-responsive">
-                <h4 class="margin-bottom-15">Products list</h4>
-                <table class="table table-striped table-hover table-bordered">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      {% for header in headers %}
-                      <th>{{header|title}}</th>
-                      {% endfor %}
-                      <th>actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for product in products %}
-                    <tr>
-                      <td>{{forloop.counter}}</td>
-                      {% for header in headers %}
-                        <td>{{product|get_attr:header}}</td>
-                      {% endfor %}
-                      <td>
-                        <!-- Split button -->
-                        <div class="btn-group">
-                          <button type="button" class="btn btn-info">Action</button>
-                          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                          </button>
-                          <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Edit</a></li>
-                            <li><a href="#">View on site</a></li>
-                            <li><a href="#">Delete</a></li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-              <ul class="pagination pull-right">
-                <li class="disabled"><a href="#">«</a></li>
-                <li class="active"><a href="#">#TODO <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">2 <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">3 <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">4 <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">5 <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">»</a></li>
-              </ul>
+                {% include "admin/snippets/generic_table.html" with table=table %}
             </div>
           </div>
+
+
 
 <!-- <div class="margin-bottom-30">
   <div class="row">
@@ -124,9 +75,6 @@ Admin dashboard
 
 </div>
 {% endblock %}
-
-
-
 
 {% block "scripts" %}
 {% endblock %}

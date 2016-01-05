@@ -8,6 +8,7 @@ import models as shop_models
 from django import shortcuts
 from django.contrib import messages
 import datetime
+from utils import helpers
 
 # globals
 if not settings.DEBUG:
@@ -17,11 +18,17 @@ else:
 
 class ProductsAdmin(View):
     def get(self, request, *args, **kwargs):
-        products = shop_models.Product.objects.all()
-        headers = ["name","product_code","serial_number","date_added"]
+        table = dict()
+        table['headers'] = ["Name", "Product Code", "Serial number", "Date", "Actions"]
+        table['fields'] = ["name", "product_code", "serial_number", "date_added", "admin/snippets/generic_table_actions.html"]
+
+        product_list = shop_models.Product.objects.all()
+        page_no = request.GET.get('page')
+        page_size = 10
+        table["data"] = helpers.paginate(product_list,page_no,page_size)
+
         return  render(request, "admin/shop/products.html",{
-        'products':products,
-        'headers':headers
+        'table':table,
         })
 
 class ProductsCreate(View):
@@ -50,3 +57,4 @@ class ProductsCreate(View):
         return  render(request, "admin/shop/products_create.html",{
             'form':form,
         })
+# http://www.jquery-steps.com/Examples

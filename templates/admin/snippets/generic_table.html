@@ -1,0 +1,47 @@
+{% load custom_filters %}
+<div class="table-responsive">
+  <h4 class="margin-bottom-15">Products list</h4>
+  <table class="table table-striped table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        {% for header in table.headers %}
+        <th>{{header}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in table.data %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        {% for field in table.fields %}
+          <td>{{row|get_attr_or_render:field}}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<!-- <ul class="pagination pull-right">
+  <li class="disabled"><a href="#">«</a></li>
+  <li class="active"><a href="#">#TODO:table with all page links <span class="sr-only">(current)</span></a></li>
+  <li><a href="#">2 <span class="sr-only">(current)</span></a></li>
+  <li><a href="#">3 <span class="sr-only">(current)</span></a></li>
+  <li><a href="#">4 <span class="sr-only">(current)</span></a></li>
+  <li><a href="#">5 <span class="sr-only">(current)</span></a></li>
+  <li><a href="#">»</a></li>
+</ul> -->
+<ul class="pagination pull-right">
+  {% if table.data.has_previous %}
+      <li><a href="?page={{ table.data.previous_page_number }}">«</a></li>
+  {% else %}
+      <li class="disabled"><a>«</a></li>
+  {% endif %}
+
+  <li><a>Page {{ table.data.number }} of {{ table.data.paginator.num_pages }}<span class="sr-only">(current)</span></a></li>
+  {% if table.data.has_next %}
+      <li><a href="?page={{ table.data.next_page_number }}">»</a></li>
+  {% else %}
+      <li class="disabled"><a>»</a></li>
+  {% endif %}
+</ul>

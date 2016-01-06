@@ -8,10 +8,19 @@ class ProductForm(forms.Form):
     serial_number = forms.CharField()
     description = forms.CharField(widget=forms.Textarea)
     # date_added = forms.DateField()
-    track_stock = forms.BooleanField()
-    require_shipping = forms.BooleanField()
 
 class ProductImageForm(forms.Form):
     name = forms.CharField(max_length=128)
     display_order = forms.IntegerField()
     image = forms.ImageField()
+
+class ProductPriceAndStockForm(forms.Form):
+    vendor = forms.ChoiceField(choices=shop_models.Vendors.objects.all().values_list('id','name'))
+    vendor_price = forms.FloatField()
+    selling_price = forms.FloatField()
+    discount_price = forms.FloatField()
+    quantity_in_stock = forms.IntegerField()
+    reorder_point = forms.IntegerField()
+    reorder_quantity = forms.IntegerField()
+    track_stock = forms.BooleanField(required=False)
+    require_shipping = forms.BooleanField(required=False)

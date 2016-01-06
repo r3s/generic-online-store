@@ -4,7 +4,7 @@ from django.conf import settings
 import logging
 
 #globals
-if not Settings.DEBUG:
+if not settings.DEBUG:
     logger = logging.getLogger("django.request")
 else:
     logger = logging.getLogger("gs_file")

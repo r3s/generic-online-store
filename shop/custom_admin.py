@@ -34,12 +34,14 @@ class ProductsAdmin(View):
 class ProductsCreate(View):
     def get(self, request, *args, **kwargs):
         form = shop_forms.ProductForm()
+        product_image_form = shop_forms.ProductImageForm()
         return  render(request, "admin/shop/products_create.html",{
-            'form':form,
+            'formbundle':[("Product details",form), ("Product image",product_image_form)],
         })
     def post(self, request, *args, **kwargs):
         form = shop_forms.ProductForm(request.POST)
-        if form.is_valid():
+        product_image_form = shop_forms.ProductImageForm(request.POST, request.FILES)
+        if form.is_valid() and product_image_form.is_valid():
             product = shop_models.Product()
             product.name = form.cleaned_data['name']
             product.serial_number = form.cleaned_data['serial_number']
@@ -55,6 +57,6 @@ class ProductsCreate(View):
         else:
             messages.error(request, 'Product not saved..')
         return  render(request, "admin/shop/products_create.html",{
-            'form':form,
+            'formbundle':[("Product details",form), ("Product image",product_image_form)],
         })
 # http://www.jquery-steps.com/Examples

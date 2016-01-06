@@ -18,10 +18,12 @@
 {% block "body" %}
 <form class="form-horizontal"  method="post">
     {% csrf_token %}
-    {% include "admin/snippets/generic_form.html" with form=form %}
-    <input type="submit" value="Submit" />
-</form>
+    {% include "admin/snippets/generic_formsets.html" with formbundle=formbundle %}
 
+    <input class="btn btn-success" type="submit" value="Save" />
+</form>
+<br>
+<br>
 {% endblock %}
 
 

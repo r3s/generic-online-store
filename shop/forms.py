@@ -10,3 +10,8 @@ class ProductForm(forms.Form):
     # date_added = forms.DateField()
     track_stock = forms.BooleanField()
     require_shipping = forms.BooleanField()
+
+class ProductImageForm(forms.Form):
+    name = forms.CharField(max_length=128)
+    display_order = forms.IntegerField()
+    image = forms.ImageField()

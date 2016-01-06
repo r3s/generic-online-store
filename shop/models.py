@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 import logging
+import datetime
+import uuid
 
 #globals
 if not settings.DEBUG:
@@ -30,9 +32,14 @@ class Product(models.Model):
     product_code = models.CharField(max_length=128)
 
 class ProductImages(models.Model):
+    def unique_image_name(instance, filename):
+        upload_date = datetime.datetime.today()
+        formatted_date = upload_date.strftime("%B_%Y")
+        return '/'.join(['product_images',formatted_date, str(uuid.uuid4())+os.path.splitext(filename)[1]])
     product =  models.ForeignKey('Product')
     caption = models.CharField(max_length=128)
     display_order = models.PositiveSmallIntegerField()
+    image = models.ImageField(upload_to=unique_image_name, null=True)
 
 
 class ProductStock(models.Model):

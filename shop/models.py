@@ -4,6 +4,7 @@ from django.conf import settings
 import logging
 import datetime
 import uuid
+import os
 
 #globals
 if not settings.DEBUG:
@@ -31,11 +32,12 @@ class Product(models.Model):
     #Uniquely determines a product by diffrent vendors UPC  universal
     product_code = models.CharField(max_length=128)
 
+def unique_image_name(instance, filename):
+    upload_date = datetime.datetime.today()
+    formatted_date = upload_date.strftime("%B_%Y")
+    return '/'.join(['product_images',formatted_date, str(uuid.uuid4())+os.path.splitext(filename)[1]])
+
 class ProductImages(models.Model):
-    def unique_image_name(instance, filename):
-        upload_date = datetime.datetime.today()
-        formatted_date = upload_date.strftime("%B_%Y")
-        return '/'.join(['product_images',formatted_date, str(uuid.uuid4())+os.path.splitext(filename)[1]])
     product =  models.ForeignKey('Product')
     caption = models.CharField(max_length=128)
     display_order = models.PositiveSmallIntegerField()
@@ -59,8 +61,8 @@ class ProductPrices(models.Model):
     vendor_price = models.DecimalField(max_digits=10, decimal_places=2)
     selling_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=8, decimal_places=2)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(default=datetime.datetime.now)
+    updated_at = models.DateTimeField(default=datetime.datetime.now)
     #"stockrecord_id" integer NULL REFERENCES "partner_stockrecord" ("id"));
 
 class Vendors(models.Model):

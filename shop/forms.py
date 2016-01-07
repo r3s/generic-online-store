@@ -9,10 +9,15 @@ class ProductForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea)
     # date_added = forms.DateField()
 
-class ProductImageForm(forms.Form):
-    name = forms.CharField(max_length=128)
-    display_order = forms.IntegerField()
-    image = forms.ImageField()
+class ProductImageForm(forms.ModelForm):
+    # name = forms.CharField(max_length=128)
+    # display_order = forms.IntegerField()
+    # image = forms.ImageField()
+    pass
+    class Meta:
+        model = shop_models.ProductImages
+        fields = ['caption','display_order','image']
+
 
 class ProductPriceAndStockForm(forms.Form):
     vendor = forms.ChoiceField(choices=shop_models.Vendors.objects.all().values_list('id','name'))

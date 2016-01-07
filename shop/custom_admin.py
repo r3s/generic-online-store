@@ -43,9 +43,9 @@ class ProductsCreate(View):
             ("Price and stock",product_price_form)],
         })
     def post(self, request, *args, **kwargs):
+        product_image_form = shop_forms.ProductImageForm(request.POST, request.FILES)
         form = shop_forms.ProductForm(request.POST)
         product_price_form = shop_forms.ProductPriceAndStockForm(request.POST)
-        product_image_form = shop_forms.ProductImageForm(request.POST, request.FILES)
         if form.is_valid() and product_image_form.is_valid() and product_price_form.is_valid():
             product = shop_models.Product()
             product.name = form.cleaned_data['name']
@@ -53,10 +53,37 @@ class ProductsCreate(View):
             product.description = form.cleaned_data['description']
             product.category = shop_models.ProductCategories.objects.get(id=form.cleaned_data['category'])
             product.product_code = form.cleaned_data['product_code']
-            product.track_stock = form.cleaned_data['track_stock']
-            product.requires_shipping = form.cleaned_data['require_shipping']
+            product.track_stock = product_price_form.cleaned_data['track_stock']
+            product.requires_shipping = product_price_form.cleaned_data['require_shipping']
             product.date_added = datetime.datetime.now()
             product.save()
+
+            product_image_data = product_image_form.save(commit=False) #Modelform
+            product_image_data.product = product
+            product_image_data.save()
+
+            vendor = shop_models.Vendors.objects.get(id=product_price_form.cleaned_data['vendor'])
+
+            stock = shop_models.ProductStock()
+            stock.vendor = vendor
+            stock.product = product
+            stock.quantity = product_price_form.cleaned_data['quantity_in_stock']
+            stock.reorder_point = product_price_form.cleaned_data['reorder_point']
+            stock.reorder_quantity = product_price_form.cleaned_data['reorder_quantity']
+            stock.save()
+
+            price = shop_models.ProductPrices()
+            price.vendor = vendor
+            price.product = product
+            price.vendor_price =  product_price_form.cleaned_data['vendor_price']
+            price.selling_price =  product_price_form.cleaned_data['selling_price']
+            price.discount_price =  product_price_form.cleaned_data['discount_price']
+            price.vendor_price =  product_price_form.cleaned_data['vendor_price']
+            price.vendor_price =  product_price_form.cleaned_data['vendor_price']
+            price.save()
+
+
+
             messages.success(request, 'Save successful..')
             return shortcuts.redirect("admin_shop_products")
         else:

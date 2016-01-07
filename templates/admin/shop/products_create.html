@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block "body" %}
-<form class="form-horizontal"  method="post">
+<form class="form-horizontal"  method="post" enctype="multipart/form-data">>
     {% csrf_token %}
     {% include "admin/snippets/generic_formsets.html" with formbundle=formbundle %}
 

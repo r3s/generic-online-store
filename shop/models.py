@@ -19,6 +19,8 @@ class ProductCategories(models.Model):
     slug = models.SlugField()
     parent_slug = models.SlugField()
     depth = models.PositiveSmallIntegerField()
+    def __unicode__(self):
+        return self.title
 
 class Product(models.Model):
     category =  models.ForeignKey('ProductCategories')

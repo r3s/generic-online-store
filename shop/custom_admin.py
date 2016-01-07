@@ -94,4 +94,40 @@ class ProductsCreate(View):
             ("Product image",product_image_form),
             ("Price and stock",product_price_form)],
         })
-# http://www.jquery-steps.com/Examples
+
+class CategoryAdmin(View):
+    def get(self, request, *args, **kwargs):
+        table = dict()
+        table['headers'] = ["Title", "Slug", "Depth", "Parent","Actions"]
+        table['fields'] = ["title", "slug", "depth", "parent", "admin/snippets/generic_table_actions.html"]
+        category_list = shop_models.ProductCategories.objects.all()
+        page_no = request.GET.get('page')
+        page_size = 10
+        table["data"] = helpers.paginate(category_list,page_no,page_size)
+
+        return  render(request, "admin/shop/categories.html",{
+        'table':table,
+        })
+
+class CategoriesCreate(View):
+    def get(self, request, *args, **kwargs):
+        form = shop_forms.ProductCategoryForm()
+        return  render(request, "admin/shop/categories_create.html",{
+            'formbundle':[
+            ("Category details",form),]
+        })
+    def post(self, request, *args, **kwargs):
+        form = shop_forms.ProductCategoryForm(request.POST)
+        if form.is_valid():
+            category_data = form.save(commit=False) #Modelform
+            category_data.parent_slug =  category_data.parent.slug
+            category_data.save()
+
+            messages.success(request, 'Save successful..')
+            return shortcuts.redirect("admin_shop_categories")
+        else:
+            messages.error(request, 'Product not saved..')
+        return  render(request, "admin/shop/categories_create.html",{
+            'formbundle':[
+            ("Category details",form),]
+        })

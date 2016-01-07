@@ -1,0 +1,80 @@
+{% extends "admin/base.html" %}
+{% load staticfiles %}
+
+{% block head_title %}
+Categories
+{% endblock %}
+
+{% block "sidebar" %}
+{% include "admin/sidebar.html" with menu_shop_open="open" menu_shop_product="active" %}
+{% endblock %}
+
+{% block "body" %}
+<ol class="breadcrumb">
+  <li ><a href="#">Admin</a></li>
+  <li><a href="#">Shop</a></li>
+  <li><a href="#" class="active">Categories</a></li>
+</ol>
+<!-- <div class="well">
+    <form action="." method="get" class="form-inline">
+      <span class="form-group "><h4><i class="fa fa-search"></i>Search Products</h4></span>
+<span class="error-block"></span>
+<span class="form-group ">
+    <label for="id_upc">UPC:</label>
+    <input class="form-control" id="id_upc" maxlength="16" name="upc" type="text">
+</span>
+<span class="form-group ">
+    <label for="id_title">Product title:</label>
+    <input class="form-control" id="id_title" maxlength="255" name="title" type="text">
+</span>
+        <button type="submit" class="btn btn-primary" data-loading-text="Searching...">Search</button>
+    </form>
+</div> -->
+
+<div class="row margin-bottom-30">
+            <div class="col-md-12">
+              <ul class="nav nav-pills">
+                <li><a class="btn btn-default" href="{% url 'admin_shop_categories_create'%}">Add new</a></li>
+              </ul>
+            </div>
+          </div>
+
+
+<div class="row">
+            <div class="col-md-12">
+              <!-- <div class="btn-group pull-right" id="templatemo_sort_btn">
+                <button type="button" class="btn btn-default">Sort by</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">First Name</a></li>
+                  <li><a href="#">Last Name</a></li>
+                  <li><a href="#">Username</a></li>
+                </ul>
+              </div> -->
+                {% include "admin/snippets/generic_table.html" with table=table %}
+            </div>
+          </div>
+
+
+
+<!-- <div class="margin-bottom-30">
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-pills">
+        <li class="active"><a href="#">Home <span class="badge">42</span></a></li>
+        <li class="active"><a href="#">Profile <span class="badge">126</span></a></li>
+        <li class="active"><a href="#">Messages <span class="badge">14</span></a></li>
+      </ul>
+    </div>
+  </div>
+</div> -->
+
+
+</div>
+{% endblock %}
+
+{% block "scripts" %}
+{% endblock %}

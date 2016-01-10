@@ -9,14 +9,31 @@ class ProductForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea)
     # date_added = forms.DateField()
 
-class ProductImageForm(forms.ModelForm):
-    # name = forms.CharField(max_length=128)
-    # display_order = forms.IntegerField()
-    # image = forms.ImageField()
-    pass
-    class Meta:
-        model = shop_models.ProductImages
-        fields = ['caption','display_order','image']
+class ProductImageForm(forms.Form):
+    multiple_form = True
+    multiple_form_id = "product-images-form"
+    count = 5
+    field_types = ["caption", "display_order", "image"]
+
+    caption1 = forms.CharField(required=False)
+    display_order1 = forms.IntegerField(required=False)
+    image1 = forms.ImageField(required=False)
+
+    caption2 = forms.CharField(required=False)
+    display_order2 = forms.IntegerField(required=False)
+    image2 = forms.ImageField(required=False)
+
+    caption3 = forms.CharField(required=False)
+    display_order3 = forms.IntegerField(required=False)
+    image3 = forms.ImageField(required=False)
+
+    caption4 = forms.CharField(required=False)
+    display_order4 = forms.IntegerField(required=False)
+    image4 = forms.ImageField(required=False)
+
+    caption5 = forms.CharField(required=False)
+    display_order5 = forms.IntegerField(required=False)
+    image5 = forms.ImageField(required=False)
 
 
 class ProductPriceAndStockForm(forms.Form):

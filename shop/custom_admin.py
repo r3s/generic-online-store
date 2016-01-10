@@ -51,16 +51,24 @@ class ProductsCreate(View):
             product.name = form.cleaned_data['name']
             product.serial_number = form.cleaned_data['serial_number']
             product.description = form.cleaned_data['description']
-            product.category = shop_models.ProductCategories.objects.get(id=form.cleaned_data['category'])
+            product.category = form.cleaned_data['category']
             product.product_code = form.cleaned_data['product_code']
             product.track_stock = product_price_form.cleaned_data['track_stock']
             product.requires_shipping = product_price_form.cleaned_data['require_shipping']
             product.date_added = datetime.datetime.now()
             product.save()
 
-            product_image_data = product_image_form.save(commit=False) #Modelform
-            product_image_data.product = product
-            product_image_data.save()
+            import ipdb
+            for i in range(1,product_image_form.count):
+                ipdb.set_trace()
+                if request.FILES.has_key('image'+str(i)):
+                    product_image = shop_models.ProductImages(
+                        product = product,
+                        caption = product_image_form.cleaned_data["caption"+str(i)] or "NC",
+                        display_order = product_image_form.cleaned_data["display_order"+str(i)] or 5,
+                        image = request.FILES['image'+str(i)]
+                    )
+                    product_image.save()
 
             vendor = shop_models.Vendors.objects.get(id=product_price_form.cleaned_data['vendor'])
 

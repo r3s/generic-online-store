@@ -18,22 +18,27 @@ class ProductImageForm(forms.Form):
     caption1 = forms.CharField(required=False)
     display_order1 = forms.IntegerField(required=False)
     image1 = forms.ImageField(required=False)
+    image1_pk = forms.CharField(widget=forms.HiddenInput,required=False,label='')
 
     caption2 = forms.CharField(required=False)
     display_order2 = forms.IntegerField(required=False)
     image2 = forms.ImageField(required=False)
+    image2_pk = forms.CharField(widget=forms.HiddenInput,required=False,label='')
 
     caption3 = forms.CharField(required=False)
     display_order3 = forms.IntegerField(required=False)
     image3 = forms.ImageField(required=False)
+    image3_pk = forms.CharField(widget=forms.HiddenInput,required=False,label='')
 
     caption4 = forms.CharField(required=False)
     display_order4 = forms.IntegerField(required=False)
     image4 = forms.ImageField(required=False)
+    image4_pk = forms.CharField(widget=forms.HiddenInput,required=False,label='')
 
     caption5 = forms.CharField(required=False)
     display_order5 = forms.IntegerField(required=False)
     image5 = forms.ImageField(required=False)
+    image5_pk = forms.CharField(widget=forms.HiddenInput,required=False,label='')
 
 
 class ProductPriceAndStockForm(forms.Form):

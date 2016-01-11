@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     url(r'^categories/$', shop_admin.CategoryAdmin.as_view(), name='admin_shop_categories'),
     url(r'^products/create/$', shop_admin.ProductsCreate.as_view(), name='admin_shop_products_create'),
     url(r'^products/(?P<product_id>\d+)/edit/$', shop_admin.ProductsEdit.as_view(), name='admin_shop_products_edit'),
+    url(r'^products/(?P<product_id>\d+)/delete/$', shop_admin.ProductsDelete.as_view(), name='admin_shop_products_delete'),
     url(r'^categories/create/$', shop_admin.CategoriesCreate.as_view(), name='admin_shop_categories_create'),
     # url(r'^(?P<id>\d+)/calls/$', 'competitions.views.my_calls', name='my_calls'),
 )

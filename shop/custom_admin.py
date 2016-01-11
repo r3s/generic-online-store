@@ -218,6 +218,21 @@ class ProductsEdit(View):
             ("Price and stock",product_price_form)],
         })
 
+class ProductsDelete(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            product = shop_models.Product.objects.get(pk=kwargs.pop("product_id"))
+        except shop_models.Product.DoesNotExist:
+            raise http.Http404("No product matches the given query.")
+        product.productimages_set.all().delete()
+        product.productprices_set.all().delete()
+        product.productstock_set.all().delete()
+        product.delete()
+
+        return http.JsonResponse({'status': 'success'})
+
+
+
 class CategoryAdmin(View):
     def get(self, request, *args, **kwargs):
         table = dict()

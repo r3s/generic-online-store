@@ -11,7 +11,7 @@
     </thead>
     <tbody>
       {% for row in table.data %}
-      <tr>
+      <tr id="row_{{row.id}}">
         <td>{{forloop.counter}}</td>
         {% for field in table.fields %}
           <td>{{row|get_attr_or_render:field}}</td>

@@ -1,0 +1,32 @@
+{% extends "admin/base.html" %}
+{% load staticfiles %}
+{% block head %}
+{% endblock %}
+
+
+{% block head_title %}
+Edit categories
+{% endblock %}
+
+
+{% block css %}
+{% endblock %}
+
+{% block "sidebar" %}
+{% include "admin/sidebar.html" with menu_shop_open="open" menu_shop_product="active" %}
+{% endblock %}
+
+{% block "body" %}
+<form class="form-horizontal"  method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% include "admin/snippets/generic_formsets.html" with formbundle=formbundle %}
+
+    <input class="btn btn-success" type="submit" value="Save changes" />
+</form>
+<br>
+<br>
+{% endblock %}
+
+
+{% block "scripts" %}
+{% endblock %}

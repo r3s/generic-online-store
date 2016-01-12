@@ -224,11 +224,13 @@ class ProductsDelete(View):
             product = shop_models.Product.objects.get(pk=kwargs.pop("product_id"))
         except shop_models.Product.DoesNotExist:
             raise http.Http404("No product matches the given query.")
-        product.productimages_set.all().delete()
-        product.productprices_set.all().delete()
-        product.productstock_set.all().delete()
-        product.delete()
-
+        try:
+            product.productimages_set.all().delete()
+            product.productprices_set.all().delete()
+            product.productstock_set.all().delete()
+            product.delete()
+        except:
+            return http.JsonResponse({'status': 'failed'})
         return http.JsonResponse({'status': 'success'})
 
 
@@ -237,7 +239,7 @@ class CategoryAdmin(View):
     def get(self, request, *args, **kwargs):
         table = dict()
         table['headers'] = ["Title", "Slug", "Depth", "Parent","Actions"]
-        table['fields'] = ["title", "slug", "depth", "parent", "admin/snippets/generic_table_actions.html"]
+        table['fields'] = ["title", "slug", "depth", "parent", "admin/shop/category_table_actions.html"]
         category_list = shop_models.ProductCategories.objects.all()
         page_no = request.GET.get('page')
         page_size = 10
@@ -269,3 +271,46 @@ class CategoriesCreate(View):
             'formbundle':[
             ("Category details",form),]
         })
+
+class CategoriesEdit(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            category = shop_models.ProductCategories.objects.get(pk=kwargs.pop("category_id"))
+        except shop_models.Product.DoesNotExist:
+            raise http.Http404("No category matches the given query.")
+        form = shop_forms.ProductCategoryForm(instance = category)
+        return  render(request, "admin/shop/categories_edit.html",{
+            'formbundle':[
+            ("Category details",form),]
+        })
+    def post(self, request, *args, **kwargs):
+        try:
+            category = shop_models.ProductCategories.objects.get(pk=kwargs.pop("category_id"))
+        except shop_models.Product.DoesNotExist:
+            raise http.Http404("No category matches the given query.")
+        form = shop_forms.ProductCategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            category_data = form.save(commit=False) #Modelform
+            category_data.parent_slug =  category_data.parent.slug
+            category_data.save()
+
+            messages.success(request, 'Save successful..')
+            return shortcuts.redirect("admin_shop_categories")
+        else:
+            messages.error(request, 'category not saved..')
+        return  render(request, "admin/shop/categories_edit.html",{
+            'formbundle':[
+            ("Category details",form),]
+        })
+
+class CategoriesDelete(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            category = shop_models.ProductCategories.objects.get(pk=kwargs.pop("category_id"))
+        except shop_models.Product.DoesNotExist:
+            raise http.Http404("No category matches the given query.")
+        try:
+            category.delete()
+        except:
+            return http.JsonResponse({'status': 'failed'})
+        return http.JsonResponse({'status': 'success'})

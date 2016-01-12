@@ -59,7 +59,7 @@ Products list
           </div>
 
 
-{% include "admin/snippets/table_action_confirm_modal.html" %}
+{% include "admin/snippets/table_action_confirm_modal.html" with delete_url="admin_shop_products_delete"  %}
 <!-- <div class="margin-bottom-30">
   <div class="row">
     <div class="col-md-12">
@@ -77,48 +77,6 @@ Products list
 {% endblock %}
 
 {% block "scripts" %}
-<script type="text/javascript">
-function delete_item(id){
-  $('#data-placeholder').html(id);
-  $('#confirm-modal').modal();
-}
-function delete_confirmed(){
-  var id = $('#data-placeholder').html();
-  $('#confirm-modal').modal('hide');
-  delete_request(id);
-}
-function delete_cancel(){
-  $('#data-placeholder').html("");
-}
-// method = GET/POST
-// url = " URL::route('notification.mark')"
-// data = {
-//    'id'        : id,
-//    'read'      : read,
-//    'all'       : all
-// }
-// callback = success function
-// param = parameter passed to success function
-function ajax_request(url,method,data,callback,param){
-    $.ajax({
-        type:method,
-        url:url,
-        data: data,
-        success: function(json_obj){
-            if (json_obj['status']=="success"){
-              callback(param);
-            }
-        }
-    });
-}
-function destroy_row(id){
-  $(id).fadeToggle();
-}
-function delete_request(id){
-  var url = "{% url 'admin_shop_products_delete' product_id=0 %}"
-  url = url.replace('0', id);
-  ajax_request(url,"GET","", destroy_row,"#row_"+id);
-}
-
-</script>
+<!-- For table ajax actions to work, "table_action_confirm_modal.html" should be included with valid url params  -->
+<script src="{% static 'genshop/js/table_actions.js' %}"></script>
 {% endblock %}

@@ -3,8 +3,8 @@ from django import http
 import logging
 from django.conf import settings
 from django.views.generic import View
-import forms as shop_forms
-import models as shop_models
+import shop.admin_forms as shop_forms
+import shop.models as shop_models
 from django import shortcuts
 from django.contrib import messages
 import datetime

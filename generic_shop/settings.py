@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 3rd party libraries
+    'sorl.thumbnail',
     # User apps
     'user_profiles',
     'gs_core',

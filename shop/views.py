@@ -32,3 +32,15 @@ class ProductsList(View):
         'queryset':queryset,
         'categories':categories,
         })
+
+class ProductDetails(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            product = shop_models.Product.objects.get(pk=kwargs.pop("product_id"))
+        except shop_models.Product.DoesNotExist:
+            raise http.Http404("No product matches the given query.")
+        categories = shop_models.ProductCategories.objects.all()
+        return  shortcuts.render(request, "shop/product_details.html",{
+        'product':product,
+        'categories':categories,
+        })

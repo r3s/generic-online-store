@@ -13,3 +13,9 @@ def get_attr_or_render(model, attribute):
         return render_to_string(attribute, {"model":model}) # Where attribute is template name
     else:
         return getattr(model,attribute) # Where attribute is model field name
+
+@register.filter
+def currency(value):
+    if not value:
+        return "N/A"
+    return "Rs. "+str(value)

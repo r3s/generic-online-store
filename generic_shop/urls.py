@@ -2,6 +2,7 @@ from django.conf.urls import include, url
 
 urlpatterns = [
     url(r'^admin/shop/', include('shop.admin_urls')),
+    url(r'^shop/', include('shop.urls')),
     url(r'^auth/', include('user_profiles.urls')),
     url(r'^', include('gs_core.urls')),
 ]
@@ -9,6 +10,7 @@ urlpatterns = [
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 ## debug stuff to serve static media

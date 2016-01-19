@@ -97,10 +97,11 @@ Product details
                 {% thumbnail obj.image "84x84" crop="center" as im %}
                     <a href=""><img src="{{ im.url }}"></a>
                 {% endthumbnail %}
-                {% if forloop.counter|divisibleby:3 %}</div><div class="item">{% endif %}
+                {% if forloop.counter|divisibleby:3 and not forloop.last%}</div><div class="item">{% endif %}
               {% endfor %}
               </div>
             </div>
+                {% if product.productimages_set.all|length > 3%}
                 <!-- Controls -->
                 <a class="left item-control" href="#similar-product" data-slide="prev">
                 <i class="fa fa-angle-left"></i>
@@ -108,6 +109,7 @@ Product details
                 <a class="right item-control" href="#similar-product" data-slide="next">
                 <i class="fa fa-angle-right"></i>
                 </a>
+                {% endif %}
             </div>
 
           </div>
@@ -137,14 +139,14 @@ Product details
         <div class="category-tab shop-details-tab"><!--category-tab-->
           <div class="col-sm-12">
             <ul class="nav nav-tabs">
-              <li><a href="#details" data-toggle="tab">Details</a></li>
-              <li><a href="#companyprofile" data-toggle="tab">Company Profile</a></li>
-              <li><a href="#tag" data-toggle="tab">Tag</a></li>
-              <li class="active"><a href="#reviews" data-toggle="tab">Reviews (5)</a></li>
+              <li  class="active"><a href="#details" data-toggle="tab">Details</a></li>
+              <!-- <li><a href="#companyprofile" data-toggle="tab">Company Profile</a></li>
+              <li><a href="#tag" data-toggle="tab">Tag</a></li> -->
+              <li ><a href="#reviews" data-toggle="tab">Reviews (5)</a></li>
             </ul>
           </div>
           <div class="tab-content">
-            <div class="tab-pane fade" id="details" >
+            <!-- <div class="tab-pane fade" id="details" >
               <div class="col-sm-3">
                 <div class="product-image-wrapper">
                   <div class="single-products">
@@ -193,9 +195,9 @@ Product details
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
-            <div class="tab-pane fade" id="companyprofile" >
+            <!-- <div class="tab-pane fade" id="companyprofile" >
               <div class="col-sm-3">
                 <div class="product-image-wrapper">
                   <div class="single-products">
@@ -244,9 +246,9 @@ Product details
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
-            <div class="tab-pane fade" id="tag" >
+            <!-- <div class="tab-pane fade" id="tag" >
               <div class="col-sm-3">
                 <div class="product-image-wrapper">
                   <div class="single-products">
@@ -295,9 +297,17 @@ Product details
                   </div>
                 </div>
               </div>
+            </div> -->
+
+            <div class="tab-pane fade active in product-description" id="details" >
+              <div class="col-sm-12">
+                <p><b>Product description</b></p>
+                <p>{{product.description}}</p>
+
+              </div>
             </div>
 
-            <div class="tab-pane fade active in" id="reviews" >
+            <div class="tab-pane fade" id="reviews" >
               <div class="col-sm-12">
                 <ul>
                   <li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>

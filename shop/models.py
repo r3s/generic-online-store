@@ -71,6 +71,8 @@ class Vendors(models.Model):
     user = models.ForeignKey(User)
     code = models.CharField(max_length=128, unique = True)
     name = models.CharField(max_length=128)
+    def __unicode__(self):
+        return self.name
 
 class VendorAddress(models.Model):
     vendor = models.ForeignKey('Vendors')

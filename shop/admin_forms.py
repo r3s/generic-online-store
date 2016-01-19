@@ -42,7 +42,7 @@ class ProductImageForm(forms.Form):
 
 
 class ProductPriceAndStockForm(forms.Form):
-    vendor = forms.ChoiceField(choices=shop_models.Vendors.objects.all().values_list('id','name'))
+    vendor = forms.ModelChoiceField(queryset=shop_models.Vendors.objects.all())
     vendor_price = forms.FloatField()
     selling_price = forms.FloatField()
     discount_price = forms.FloatField()

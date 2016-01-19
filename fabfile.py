@@ -53,12 +53,12 @@ def dev():
     env.remote_activate_script = "source /home/pi/django/generic_shop/env/bin/activate"
 
 
-# @task()
-# def updatedeps():
-#     code_dir = "/srv/www/dcapp_api/dc-app"
-#     with cd(code_dir):
-#         run("umask 002 && php composer.phar install")
-#         print(green("""Packages updated.""", bold=True))
+@task()
+def updatedeps():
+    with prefix(env.remote_activate_script):
+        with cd(env.remote_project_root):
+            run("pip install -r requirements.txt --download-cache=.pip_cache")
+            print(orange("""Packages updated.""", bold=True))
 
 @task()
 def publish():

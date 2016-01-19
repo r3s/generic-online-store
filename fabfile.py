@@ -58,7 +58,7 @@ def updatedeps():
     with prefix(env.remote_activate_script):
         with cd(env.remote_project_root):
             run("pip install -r requirements.txt --download-cache=.pip_cache")
-            print(orange("""Packages updated.""", bold=True))
+            print(green("""Packages updated.""", bold=True))
 
 @task()
 def publish():

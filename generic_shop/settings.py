@@ -176,3 +176,7 @@ LOGGING = {
 # Override with environment specific settings
 # See local_settings_sample.py
 from local_settings import *
+
+if DEBUG == True:
+    INSTALLED_APPS += ('debug_toolbar',)
+    MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)

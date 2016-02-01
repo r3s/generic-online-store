@@ -8,7 +8,7 @@ import models as shop_models
 # import forms as shop_forms
 import datetime
 import logging
-import ipdb
+# import ipdb
 
 # globals
 if not settings.DEBUG:

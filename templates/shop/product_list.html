@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% load thumbnail %}
 {% load custom_filters %} {# Provides currency #}
 
 
@@ -85,37 +84,7 @@ Products
           <h2 class="title text-center">Features Items</h2>
 
           {% for item in queryset %}
-          <div class="col-sm-4">
-            <div class="product-image-wrapper">
-              <div class="single-products">
-                <div class="productinfo text-center">
-                  {% if item.productimages_set.all.0.image %}
-                  {% thumbnail item.productimages_set.all.0.image "268x249" crop="center" as im %}
-                      <img src="{{ im.url }}">
-                  {% endthumbnail %}
-                  {% else %}
-                      <img src="{% static 'theme/images/no_img.jpg' %}">
-                  {% endif %}
-                  <h2>{{item.productprices_set.all.0.selling_price|currency}}</h2>
-                  <p>{{item.name}}</p>
-                  <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                </div>
-                <div class="product-overlay">
-                  <div class="overlay-content">
-                    <h2>{{item.productprices_set.all.0.selling_price|currency}}</h2>
-                    <p>{{item.name}}</p>
-                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                  </div>
-                </div>
-              </div>
-              <div class="choose">
-                <ul class="nav nav-pills nav-justified">
-                  <li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-                  <li><a href="{% url 'shop_products_details' item.id %}"><i class="fa fa-plus-square"></i>View details</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          {% include "shop/snippets/product_tile.html" with item=item %}
           {% endfor %}
 
 <div class="col-sm-9">

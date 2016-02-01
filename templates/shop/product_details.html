@@ -12,6 +12,7 @@ Product details
 
 
 {% block css %}
+<link rel="stylesheet" href="{% static 'theme/js/lightbox/dist/ekko-lightbox.min.css' %}">
 {% endblock %}
 
 {% block "body" %}<!-- <section id="advertisement">
@@ -81,9 +82,14 @@ Product details
           <div class="col-sm-5">
             <div class="view-product">
               {% if product.productimages_set.all.0.image %}
-              {% thumbnail product.productimages_set.all.0.image "329x380" crop="center" as im %}
-                  <img src="{{ im.url }}">
-              {% endthumbnail %}
+                {% thumbnail product.productimages_set.all.0.image "660x760" as im %}
+                    <a id="bootstrap_lightbox_preview" href="{{ im.url }}">
+                {% endthumbnail %}
+
+                {% thumbnail product.productimages_set.all.0.image "329x380" padding=True as im %}
+                    <img id="image_preview_large"  src="{{ im.url }}">
+                {% endthumbnail %}
+              </a>
               {% else %}
                 <img src="{% static 'theme/images/no_img.jpg' %}">
               {% endif %}
@@ -94,9 +100,17 @@ Product details
               <div class="carousel-inner">
               <div class="item active">
               {% for obj in product.productimages_set.all %}
-                {% thumbnail obj.image "84x84" crop="center" as im %}
-                    <a href=""><img src="{{ im.url }}"></a>
+                {% thumbnail obj.image "84x84" padding=True  as im %}
+                    <a href="#" ><img  class="mini_tiles" src="{{ im.url }}"
+                      {% thumbnail obj.image  "329x380" padding=True as im %}
+                          large="{{im.url}}"
+                      {% endthumbnail %}
+                      {% thumbnail obj.image "660x760" as im%}
+                          zoom="{{im.url}}"
+                      {% endthumbnail %}
+                      ></a>
                 {% endthumbnail %}
+
                 {% if forloop.counter|divisibleby:3 and not forloop.last%}</div><div class="item">{% endif %}
               {% endfor %}
               </div>
@@ -433,4 +447,20 @@ Product details
 
 
 {% block "scripts" %}
+<script src="{% static 'theme/js/lightbox/dist/ekko-lightbox.min.js' %}"></script>
+<script type="text/javascript">
+$('.mini_tiles').on('click',function(){
+   var src = $(this).attr('large');
+   var zoom_uri = $(this).attr('zoom');
+   $('#image_preview_large').attr('src',src);
+   $('#bootstrap_lightbox_preview').attr('href',zoom_uri);
+});
+
+$('#bootstrap_lightbox_preview').on('click',function(event){
+   event.preventDefault();
+   // http://ashleydw.github.io/lightbox/
+   $("#bootstrap_lightbox_preview").ekkoLightbox();
+});
+
+</script>
 {% endblock %}

@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+{% load staticfiles %}
+
+{% block head_title %}
+Categories
+{% endblock %}
+
+{% block "sidebar" %}
+{% include "admin/sidebar.html" with menu_shop_open="open" menu_shop_vendors="active" %}
+{% endblock %}
+
+{% block "body" %}
+<ol class="breadcrumb">
+  <li ><a href="#">Admin</a></li>
+  <li><a href="#">Shop</a></li>
+  <li><a href="#" class="active">Vendors</a></li>
+</ol>
+
+<div class="row margin-bottom-30">
+            <div class="col-md-12">
+              <ul class="nav nav-pills">
+                <li><a class="btn btn-default" href="{% url 'admin_shop_vendors_create'%}">Add new</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+                {% include "admin/snippets/generic_table.html" with table=table %}
+            </div>
+          </div>
+
+{% include "admin/snippets/table_action_confirm_modal.html" with delete_url="admin_shop_vendors_delete"  %}
+</div>
+{% endblock %}
+
+{% block "scripts" %}
+<!-- For table ajax actions to work, "table_action_confirm_modal.html" should be included with valid url params  -->
+<script src="{% static 'genshop/js/table_actions.js' %}"></script>
+{% endblock %}

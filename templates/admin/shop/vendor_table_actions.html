@@ -1,0 +1,7 @@
+{% extends "admin/snippets/generic_table_actions.html" %}
+
+{% block actions %}
+<li><a id="id_edit_{{model.id}}" href="{% url 'admin_shop_vendors_edit' vendor_id=model.id %}">Edit</a></li>
+<!-- <li><a href="#" >View on site</a></li> -->
+<li><a href="#" onclick="delete_item({{model.id}});" >Delete</a></li>
+{% endblock %}

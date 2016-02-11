@@ -314,3 +314,99 @@ class CategoriesDelete(View):
         except:
             return http.JsonResponse({'status': 'failed'})
         return http.JsonResponse({'status': 'success'})
+
+
+class VendorAdmin(View):
+    def get(self, request, *args, **kwargs):
+        table = dict()
+        table['headers'] = ["Name", "Code", "User","Actions"]
+        table['fields'] = ["name", "code", "user", "admin/shop/vendor_table_actions.html"]
+        items_list = shop_models.Vendors.objects.all()
+        page_no = request.GET.get('page')
+        page_size = 10
+        table["data"] = helpers.paginate(items_list,page_no,page_size)
+
+        return  render(request, "admin/shop/vendors.html",{
+        'table':table,
+        })
+
+class VendorsCreate(View):
+    def get(self, request, *args, **kwargs):
+        form = shop_forms.VendorForm()
+        vendor_address_form = shop_forms.VendorAddressForm()
+        return  render(request, "admin/shop/categories_create.html",{
+            'formbundle':[
+            ("Vendor details",form),
+            ("Vendor address",vendor_address_form),]
+        })
+
+    def post(self, request, *args, **kwargs):
+        form = shop_forms.VendorForm(request.POST)
+        vendor_address_form = shop_forms.VendorAddressForm(request.POST)
+        if form.is_valid() and vendor_address_form.is_valid():
+            vendor = form.save()
+            vendor_addr_data = vendor_address_form.save(commit=False) #Modelform
+            vendor_addr_data.vendor =  vendor
+            vendor_addr_data.save()
+
+            messages.success(request, 'Save successful..')
+            return shortcuts.redirect("admin_shop_vendors")
+        else:
+            messages.error(request, 'Vendor not saved..')
+        return  render(request, "admin/shop/vendors_create.html",{
+            'formbundle':[
+            ("Vendor details",form),
+            ("Vendor address",vendor_address_form),]
+        })
+
+class VendorsEdit(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            vendor = shop_models.Vendors.objects.get(pk=kwargs.pop("vendor_id"))
+            address = shop_models.VendorAddress.objects.filter(vendor=vendor).first()
+        except shop_models.Vendors.DoesNotExist:
+            raise http.Http404("No 'vendor' matches the given query.")
+        form = shop_forms.VendorForm(instance = vendor)
+        vendor_address_form = shop_forms.VendorAddressForm(instance = address)
+        return  render(request, "admin/shop/vendors_edit.html",{
+            'formbundle':[
+            ("Vendor details",form),
+            ("Vendor address",vendor_address_form),]
+        })
+    def post(self, request, *args, **kwargs):
+        try:
+            vendor = shop_models.Vendors.objects.get(pk=kwargs.pop("vendor_id"))
+            address = shop_models.VendorAddress.objects.filter(vendor=vendor).first()
+        except shop_models.Vendors.DoesNotExist:
+            raise http.Http404("No 'vendor' matches the given query.")
+        form = shop_forms.VendorForm(request.POST, instance = vendor)
+        vendor_address_form = shop_forms.VendorAddressForm(request.POST, instance = address)
+        if form.is_valid() and vendor_address_form.is_valid():
+            vendor = form.save()
+            vendor_addr_data = vendor_address_form.save(commit=False) #Modelform
+            vendor_addr_data.vendor =  vendor
+            vendor_addr_data.save()
+
+            messages.success(request, 'Save successful..')
+            return shortcuts.redirect("admin_shop_vendors")
+        else:
+            messages.error(request, 'Vendor not saved..')
+        return  render(request, "admin/shop/vendors_edit.html",{
+            'formbundle':[
+            ("Vendor details",form),
+            ("Vendor address",vendor_address_form),]
+        })
+
+class VendorsDelete(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            vendor = shop_models.Vendors.objects.get(pk=kwargs.pop("vendor_id"))
+            address = shop_models.VendorAddress.objects.filter(vendor=vendor).first()
+        except shop_models.Vendors.DoesNotExist:
+            raise http.Http404("No vendor matches the given query.")
+        try:
+            address.delete()
+            vendor.delete()
+        except:
+            return http.JsonResponse({'status': 'failed'})
+        return http.JsonResponse({'status': 'success'})

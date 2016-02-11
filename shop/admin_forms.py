@@ -1,5 +1,6 @@
 from django import forms
 import models as shop_models
+from django.contrib.auth.models import User
 
 class ProductForm(forms.Form):
     category = forms.ModelChoiceField(queryset=shop_models.ProductCategories.objects.all())
@@ -57,3 +58,15 @@ class ProductCategoryForm(forms.ModelForm):
     class Meta:
         model = shop_models.ProductCategories
         fields = ["title", "slug", "depth", "parent",]
+
+class VendorForm(forms.ModelForm):
+    user = forms.ModelChoiceField(queryset=User.objects.all())
+    class Meta:
+        model = shop_models.Vendors
+        fields =  ["name", "code", "user"]
+
+class VendorAddressForm(forms.ModelForm):
+    pass
+    class Meta:
+        model = shop_models.VendorAddress
+        fields = ["title", "first_name", "last_name", "line1", "line2", "line3", "line4", "state", "postcode"]

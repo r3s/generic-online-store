@@ -83,17 +83,17 @@ Product details
             <div class="view-product">
               {% if product.productimages_set.all.0.image %}
                 {% thumbnail product.productimages_set.all.0.image "660x760" as im %}
-                    <a id="bootstrap_lightbox_preview" href="{{ im.url }}">
+                    <a id="bootstrap_lightbox_preview" data-title="Preview" data-caption="{{product.productimages_set.all.0.caption}}" href="{{ im.url }}">
                 {% endthumbnail %}
 
                 {% thumbnail product.productimages_set.all.0.image "329x380" padding=True as im %}
                     <img id="image_preview_large"  src="{{ im.url }}">
                 {% endthumbnail %}
-              </a>
+                  <h3 onclick="">ZOOM <i class="fa fa-search-plus"></i> </h3>
+                  </a>
               {% else %}
                 <img src="{% static 'theme/images/no_img.jpg' %}">
               {% endif %}
-              <h3 onclick="">ZOOM</h3>
             </div>
             <div id="similar-product" class="carousel slide" data-ride="carousel">
             <!-- Wrapper for slides -->
@@ -102,6 +102,7 @@ Product details
               {% for obj in product.productimages_set.all %}
                 {% thumbnail obj.image "84x84" padding=True  as im %}
                     <a href="#" ><img  class="mini_tiles" src="{{ im.url }}"
+                      data-caption="{{obj.caption}}"
                       {% thumbnail obj.image  "329x380" padding=True as im %}
                           large="{{im.url}}"
                       {% endthumbnail %}
@@ -452,14 +453,17 @@ Product details
 $('.mini_tiles').on('click',function(){
    var src = $(this).attr('large');
    var zoom_uri = $(this).attr('zoom');
+   var caption = $(this).attr('data-caption');
    $('#image_preview_large').attr('src',src);
    $('#bootstrap_lightbox_preview').attr('href',zoom_uri);
+   $('#bootstrap_lightbox_preview').attr('data-caption',caption);
 });
 
 $('#bootstrap_lightbox_preview').on('click',function(event){
    event.preventDefault();
+   var options = {"loadingMessage":" Loading content.. ", "footer":$(this).attr('data-caption'),};
    // http://ashleydw.github.io/lightbox/
-   $("#bootstrap_lightbox_preview").ekkoLightbox();
+   $(this).ekkoLightbox(options);
 });
 
 </script>

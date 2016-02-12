@@ -196,12 +196,14 @@ class ProductsEdit(View):
                     pass
 
             stock = shop_models.ProductStock.objects.get(product=product)
+            stock.vendor = product_price_form.cleaned_data['vendor']
             stock.quantity = product_price_form.cleaned_data['quantity_in_stock']
             stock.reorder_point = product_price_form.cleaned_data['reorder_point']
             stock.reorder_quantity = product_price_form.cleaned_data['reorder_quantity']
             stock.save()
 
             price = shop_models.ProductPrices.objects.get(product=product)
+            price.vendor = product_price_form.cleaned_data['vendor']
             price.vendor_price =  product_price_form.cleaned_data['vendor_price']
             price.selling_price =  product_price_form.cleaned_data['selling_price']
             price.discount_price =  product_price_form.cleaned_data['discount_price']

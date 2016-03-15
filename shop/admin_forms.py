@@ -3,6 +3,7 @@ import models as shop_models
 from django.contrib.auth.models import User
 
 class ProductForm(forms.Form):
+    vendor = forms.ModelChoiceField(queryset=shop_models.Vendors.objects.all())
     category = forms.ModelChoiceField(queryset=shop_models.ProductCategories.objects.all())
     name = forms.CharField()
     product_code = forms.IntegerField()
@@ -43,7 +44,6 @@ class ProductImageForm(forms.Form):
 
 
 class ProductPriceAndStockForm(forms.Form):
-    vendor = forms.ModelChoiceField(queryset=shop_models.Vendors.objects.all())
     vendor_price = forms.FloatField()
     selling_price = forms.FloatField()
     discount_price = forms.FloatField()
@@ -65,8 +65,8 @@ class VendorForm(forms.ModelForm):
         model = shop_models.Vendors
         fields =  ["name", "code", "user"]
 
-class VendorAddressForm(forms.ModelForm):
+class AddressForm(forms.ModelForm):
     pass
     class Meta:
-        model = shop_models.VendorAddress
-        fields = ["title", "first_name", "last_name", "line1", "line2", "line3", "line4", "state", "postcode"]
+        model = shop_models.Address
+        fields = ["title", "first_name", "last_name", "line1", "line2", "line3", "line4", "phone", "state", "postcode"]

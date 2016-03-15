@@ -49,6 +49,7 @@ class ProductsCreate(View):
         product_price_form = shop_forms.ProductPriceAndStockForm(request.POST)
         if form.is_valid() and product_image_form.is_valid() and product_price_form.is_valid():
             product = shop_models.Product()
+            product.vendor = form.cleaned_data['vendor']
             product.name = form.cleaned_data['name']
             product.serial_number = form.cleaned_data['serial_number']
             product.description = form.cleaned_data['description']
@@ -69,10 +70,7 @@ class ProductsCreate(View):
                     )
                     product_image.save()
 
-            vendor = shop_models.Vendors.objects.get(id=product_price_form.cleaned_data['vendor'])
-
             stock = shop_models.ProductStock()
-            stock.vendor = vendor
             stock.product = product
             stock.quantity = product_price_form.cleaned_data['quantity_in_stock']
             stock.reorder_point = product_price_form.cleaned_data['reorder_point']
@@ -80,7 +78,6 @@ class ProductsCreate(View):
             stock.save()
 
             price = shop_models.ProductPrices()
-            price.vendor = vendor
             price.product = product
             price.vendor_price =  product_price_form.cleaned_data['vendor_price']
             price.selling_price =  product_price_form.cleaned_data['selling_price']
@@ -107,6 +104,7 @@ class ProductsEdit(View):
 
         form = shop_forms.ProductForm(initial={
             'category' : product.category,
+            'vendor' : product.vendor,
             'name' : product.name,
             'product_code' : product.product_code,
             'serial_number' : product.serial_number,
@@ -120,10 +118,9 @@ class ProductsEdit(View):
             data['image'+str(i+1)] = product_images[i].image
             data['image'+str(i+1)+'_pk'] = product_images[i].id
         product_image_form = shop_forms.ProductImageForm(initial=data)
-        stock = product.productstock_set.all()[0]
-        price = product.productprices_set.all()[0]
+        stock = product.productstock
+        price = product.productprices
         product_price_form = shop_forms.ProductPriceAndStockForm(initial={
-            'vendor' : stock.vendor,
             'vendor_price' : price.vendor_price,
             'selling_price' : price.selling_price,
             'discount_price' : price.discount_price,
@@ -153,6 +150,7 @@ class ProductsEdit(View):
             product.serial_number = form.cleaned_data['serial_number']
             product.description = form.cleaned_data['description']
             product.category = form.cleaned_data['category']
+            product.vendor = form.cleaned_data['vendor']
             product.product_code = form.cleaned_data['product_code']
             product.track_stock = product_price_form.cleaned_data['track_stock']
             product.requires_shipping = product_price_form.cleaned_data['require_shipping']
@@ -196,14 +194,12 @@ class ProductsEdit(View):
                     pass
 
             stock = shop_models.ProductStock.objects.get(product=product)
-            stock.vendor = product_price_form.cleaned_data['vendor']
             stock.quantity = product_price_form.cleaned_data['quantity_in_stock']
             stock.reorder_point = product_price_form.cleaned_data['reorder_point']
             stock.reorder_quantity = product_price_form.cleaned_data['reorder_quantity']
             stock.save()
 
             price = shop_models.ProductPrices.objects.get(product=product)
-            price.vendor = product_price_form.cleaned_data['vendor']
             price.vendor_price =  product_price_form.cleaned_data['vendor_price']
             price.selling_price =  product_price_form.cleaned_data['selling_price']
             price.discount_price =  product_price_form.cleaned_data['discount_price']
@@ -228,8 +224,8 @@ class ProductsDelete(View):
             raise http.Http404("No product matches the given query.")
         try:
             product.productimages_set.all().delete()
-            product.productprices_set.all().delete()
-            product.productstock_set.all().delete()
+            product.productprices.delete()
+            product.productstock.delete()
             product.delete()
         except:
             return http.JsonResponse({'status': 'failed'})
@@ -344,12 +340,13 @@ class VendorsCreate(View):
 
     def post(self, request, *args, **kwargs):
         form = shop_forms.VendorForm(request.POST)
-        vendor_address_form = shop_forms.VendorAddressForm(request.POST)
-        if form.is_valid() and vendor_address_form.is_valid():
+        address_form = shop_forms.AddressForm(request.POST)
+        if form.is_valid() and address_form.is_valid():
             vendor = form.save()
-            vendor_addr_data = vendor_address_form.save(commit=False) #Modelform
-            vendor_addr_data.vendor =  vendor
-            vendor_addr_data.save()
+            addr = address_form.save()
+
+            vendor_address = shop_models.VendorAddress(vendor=vendor,addr=addr)
+            vendor_address.save()
 
             messages.success(request, 'Save successful..')
             return shortcuts.redirect("admin_shop_vendors")
@@ -365,11 +362,11 @@ class VendorsEdit(View):
     def get(self, request, *args, **kwargs):
         try:
             vendor = shop_models.Vendors.objects.get(pk=kwargs.pop("vendor_id"))
-            address = shop_models.VendorAddress.objects.filter(vendor=vendor).first()
+            vendor_address = shop_models.VendorAddress.objects.filter(vendor=vendor).first()
         except shop_models.Vendors.DoesNotExist:
             raise http.Http404("No 'vendor' matches the given query.")
         form = shop_forms.VendorForm(instance = vendor)
-        vendor_address_form = shop_forms.VendorAddressForm(instance = address)
+        vendor_address_form = shop_forms.AddressForm(instance = vendor_address.addr)
         return  render(request, "admin/shop/vendors_edit.html",{
             'formbundle':[
             ("Vendor details",form),
@@ -378,17 +375,14 @@ class VendorsEdit(View):
     def post(self, request, *args, **kwargs):
         try:
             vendor = shop_models.Vendors.objects.get(pk=kwargs.pop("vendor_id"))
-            address = shop_models.VendorAddress.objects.filter(vendor=vendor).first()
+            vendor_address = shop_models.VendorAddress.objects.filter(vendor=vendor).first()
         except shop_models.Vendors.DoesNotExist:
             raise http.Http404("No 'vendor' matches the given query.")
         form = shop_forms.VendorForm(request.POST, instance = vendor)
-        vendor_address_form = shop_forms.VendorAddressForm(request.POST, instance = address)
-        if form.is_valid() and vendor_address_form.is_valid():
+        address_form = shop_forms.AddressForm(request.POST, instance = vendor_address.addr)
+        if form.is_valid() and address_form.is_valid():
             vendor = form.save()
-            vendor_addr_data = vendor_address_form.save(commit=False) #Modelform
-            vendor_addr_data.vendor =  vendor
-            vendor_addr_data.save()
-
+            addr = address_form.save()
             messages.success(request, 'Save successful..')
             return shortcuts.redirect("admin_shop_vendors")
         else:
@@ -403,11 +397,12 @@ class VendorsDelete(View):
     def get(self, request, *args, **kwargs):
         try:
             vendor = shop_models.Vendors.objects.get(pk=kwargs.pop("vendor_id"))
-            address = shop_models.VendorAddress.objects.filter(vendor=vendor).first()
+            vendor_address = shop_models.VendorAddress.objects.filter(vendor=vendor).first()
         except shop_models.Vendors.DoesNotExist:
             raise http.Http404("No vendor matches the given query.")
         try:
-            address.delete()
+            vendor_address.addr.delete()
+            vendor_address.delete()
             vendor.delete()
         except:
             return http.JsonResponse({'status': 'failed'})

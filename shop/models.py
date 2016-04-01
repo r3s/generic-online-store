@@ -24,6 +24,7 @@ class ProductCategories(models.Model):
 
 class Product(models.Model):
     category =  models.ForeignKey('ProductCategories')
+    vendor = models.ForeignKey('Vendors')
     # vendor = models.ForeignKey('Vendors')
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -47,19 +48,13 @@ class ProductImages(models.Model):
 
 
 class ProductStock(models.Model):
-    """
-     product and vendor combinations uniquely identify product
-    price and stock by with respect to each vendor
-    """
-    vendor = models.ForeignKey('Vendors')
-    product = models.ForeignKey('Product')
+    product = models.OneToOneField('Product')
     quantity = models.PositiveSmallIntegerField()
     reorder_point = models.PositiveSmallIntegerField()
     reorder_quantity = models.PositiveSmallIntegerField()
 
 class ProductPrices(models.Model):
-    vendor = models.ForeignKey('Vendors')
-    product = models.ForeignKey('Product')
+    product = models.OneToOneField('Product')
     vendor_price = models.DecimalField(max_digits=10, decimal_places=2)
     selling_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=8, decimal_places=2)
@@ -76,6 +71,9 @@ class Vendors(models.Model):
 
 class VendorAddress(models.Model):
     vendor = models.ForeignKey('Vendors')
+    addr = models.OneToOneField('Address',null=True)
+
+class Address(models.Model):
     title = models.CharField(max_length=64) # MR, MRs
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -83,24 +81,25 @@ class VendorAddress(models.Model):
     line2 = models.CharField(max_length=255)
     line3 = models.CharField(max_length=255)
     line4 = models.CharField(max_length=255)
+    phone = models.CharField(max_length=16)
     state = models.CharField(max_length=255)
     postcode = models.CharField(max_length=64)
     # country = models.ForeignKey('country') #TODO
 
 class Basket(models.Model):
-    owner = models.ForeignKey(User)
-    status = models.CharField(max_length=128)
-    date_created = models.DateTimeField()
-    date_updated = models.DateTimeField()
+    owner = models.OneToOneField(User)
+    status = models.CharField(max_length=128,default="OPEN")
+    date_created = models.DateTimeField(default=datetime.datetime.now)
+    date_updated = models.DateTimeField(default=datetime.datetime.now)
     date_submitted = models.DateTimeField(null=True)
 
 class BasketLine(models.Model):
     basket = models.ForeignKey("Basket")
     product = models.ForeignKey("Product")
     # line_reference = models.CharField(max_length=128)
-    quantity = models.PositiveSmallIntegerField()
+    quantity = models.PositiveSmallIntegerField(default=1)
     price_excl_tax = models.DecimalField(max_digits=8, decimal_places=2)
     price_incl_tax = models.DecimalField(max_digits=8, decimal_places=2)
     price_currency = models.CharField(max_length=16)
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(default=datetime.datetime.now)
     #UNIQUE ("basket_id","line_reference"));
